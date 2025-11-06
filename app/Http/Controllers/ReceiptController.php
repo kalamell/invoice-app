@@ -281,7 +281,7 @@ class ReceiptController extends Controller
 
         // Load custom fonts for Thai support
         $pdf->getDomPDF()->getOptions()->set('isRemoteEnabled', true);
-        $pdf->getDomPDF()->getOptions()->set('defaultFont', 'thsarabunnew');
+        $pdf->getDomPDF()->getOptions()->set('defaultFont', 'freeserif');
 
         return $pdf->download('ใบเสร็จรับเงิน-' . $receipt->document_number . '.pdf');
     }

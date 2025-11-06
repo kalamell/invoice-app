@@ -6,8 +6,8 @@
     <title>ใบแจ้งหนี้ - {{ $invoice->document_number }}</title>
     <style>
         body {
-            font-family: 'THSarabunNew', 'Garuda', 'Norasi', sans-serif;
-            font-size: 16pt;
+            font-family: 'freeserif', 'DejaVu Sans', sans-serif;
+            font-size: 14pt;
             line-height: 1.6;
             color: #333;
         }

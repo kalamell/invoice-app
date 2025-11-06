@@ -9,7 +9,7 @@ return [
     'pdf_backend' => 'CPDF',
     'default_media_type' => 'screen',
     'default_paper_size' => 'a4',
-    'default_font' => 'thsarabunnew',
+    'default_font' => 'freeserif',
     'dpi' => 96,
     'enable_php' => false,
     'enable_javascript' => true,

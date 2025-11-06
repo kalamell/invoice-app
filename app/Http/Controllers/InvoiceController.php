@@ -279,7 +279,7 @@ class InvoiceController extends Controller
 
         // Load custom fonts for Thai support
         $pdf->getDomPDF()->getOptions()->set('isRemoteEnabled', true);
-        $pdf->getDomPDF()->getOptions()->set('defaultFont', 'thsarabunnew');
+        $pdf->getDomPDF()->getOptions()->set('defaultFont', 'freeserif');
 
         return $pdf->download('ใบแจ้งหนี้-' . $invoice->document_number . '.pdf');
     }
