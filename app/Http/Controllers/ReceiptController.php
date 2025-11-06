@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\Receipt;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReceiptController extends Controller
 {
@@ -263,5 +264,21 @@ class ReceiptController extends Controller
 
         return redirect()->route('receipts.index')
             ->with('success', 'ลบใบเสร็จรับเงินเรียบร้อยแล้ว');
+    }
+
+    public function exportPdf(Receipt $receipt)
+    {
+        $shop = auth()->user()->shop;
+
+        if (!$shop || $receipt->shop_id !== $shop->id) {
+            abort(403);
+        }
+
+        $receipt->load('customer');
+
+        $pdf = Pdf::loadView('receipts.pdf', compact('receipt', 'shop'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('ใบเสร็จรับเงิน-' . $receipt->document_number . '.pdf');
     }
 }

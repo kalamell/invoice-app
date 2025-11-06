@@ -142,8 +142,43 @@
                                 <span class="text-lg font-bold">รวมทั้งสิ้น:</span>
                                 <span class="text-lg font-bold text-blue-600">฿{{ number_format($invoice->total, 2) }}</span>
                             </div>
+                            @if($invoice->paid_amount > 0)
+                                <div class="flex justify-between py-2 text-green-600">
+                                    <span class="font-semibold">ชำระแล้ว:</span>
+                                    <span>฿{{ number_format($invoice->paid_amount, 2) }}</span>
+                                </div>
+                                <div class="flex justify-between py-2 border-t dark:border-gray-700 text-red-600">
+                                    <span class="font-semibold">คงเหลือ:</span>
+                                    <span>฿{{ number_format($invoice->total - $invoice->paid_amount, 2) }}</span>
+                                </div>
+                            @endif
                         </div>
                     </div>
+
+                    <!-- PromptPay QR Code -->
+                    @if($shop->settings->promptpay_id && $invoice->status !== 'paid' && $invoice->status !== 'cancelled')
+                        <div class="mb-6 p-6 bg-blue-50 dark:bg-blue-900 rounded-lg text-center no-print">
+                            <h3 class="font-semibold text-gray-700 dark:text-gray-300 mb-4">ชำระเงินผ่าน PromptPay</h3>
+                            <div class="flex flex-col items-center">
+                                @php
+                                    $remainingAmount = $invoice->total - $invoice->paid_amount;
+                                    $qrCode = generatePromptPayQR($shop->settings->promptpay_id, $remainingAmount);
+                                @endphp
+                                <img src="{{ $qrCode }}" alt="PromptPay QR Code" class="w-48 h-48 mb-4">
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    สแกน QR Code เพื่อชำระเงิน
+                                </p>
+                                @if($shop->settings->promptpay_name)
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                                        {{ $shop->settings->promptpay_name }}
+                                    </p>
+                                @endif
+                                <p class="text-lg font-bold text-blue-600 mt-2">
+                                    ฿{{ number_format($remainingAmount, 2) }}
+                                </p>
+                            </div>
+                        </div>
+                    @endif
 
                     <!-- Notes & Terms -->
                     @if($invoice->notes)
@@ -166,6 +201,12 @@
                             ← กลับรายการ
                         </a>
                         <div class="flex gap-2">
+                            <a href="{{ route('invoices.pdf', $invoice) }}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                <svg class="inline-block w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                ดาวน์โหลด PDF
+                            </a>
                             <button onclick="window.print()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
                                 พิมพ์
                             </button>

@@ -106,6 +106,27 @@
                         <p class="text-4xl font-bold text-green-600 dark:text-green-300">฿{{ number_format($receipt->amount, 2) }}</p>
                     </div>
 
+                    <!-- PromptPay QR Code (for reference) -->
+                    @if($shop->settings->promptpay_id && $receipt->payment_method === 'promptpay')
+                        <div class="mb-6 p-6 bg-blue-50 dark:bg-blue-900 rounded-lg text-center no-print">
+                            <h3 class="font-semibold text-gray-700 dark:text-gray-300 mb-4">ชำระผ่าน PromptPay</h3>
+                            <div class="flex flex-col items-center">
+                                @php
+                                    $qrCode = generatePromptPayQR($shop->settings->promptpay_id, $receipt->amount);
+                                @endphp
+                                <img src="{{ $qrCode }}" alt="PromptPay QR Code" class="w-48 h-48 mb-4">
+                                @if($shop->settings->promptpay_name)
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                                        {{ $shop->settings->promptpay_name }}
+                                    </p>
+                                @endif
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                                    QR Code นี้ใช้สำหรับอ้างอิงเท่านั้น
+                                </p>
+                            </div>
+                        </div>
+                    @endif
+
                     <!-- Notes -->
                     @if($receipt->notes)
                         <div class="mb-4">
@@ -120,6 +141,12 @@
                             ← กลับรายการ
                         </a>
                         <div class="flex gap-2">
+                            <a href="{{ route('receipts.pdf', $receipt) }}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                <svg class="inline-block w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                ดาวน์โหลด PDF
+                            </a>
                             <button onclick="window.print()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
                                 พิมพ์
                             </button>

@@ -33,6 +33,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('invoices', InvoiceController::class);
     Route::resource('receipts', ReceiptController::class);
 
+    // PDF Export Routes
+    Route::get('/quotations/{quotation}/pdf', [QuotationController::class, 'exportPdf'])->name('quotations.pdf');
+    Route::get('/invoices/{invoice}/pdf', [InvoiceController::class, 'exportPdf'])->name('invoices.pdf');
+    Route::get('/receipts/{receipt}/pdf', [ReceiptController::class, 'exportPdf'])->name('receipts.pdf');
+
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

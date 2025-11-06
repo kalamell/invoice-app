@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\Quotation;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class InvoiceController extends Controller
 {
@@ -261,5 +262,21 @@ class InvoiceController extends Controller
 
         return redirect()->route('invoices.index')
             ->with('success', 'ลบใบแจ้งหนี้เรียบร้อยแล้ว');
+    }
+
+    public function exportPdf(Invoice $invoice)
+    {
+        $shop = auth()->user()->shop;
+
+        if (!$shop || $invoice->shop_id !== $shop->id) {
+            abort(403);
+        }
+
+        $invoice->load(['customer', 'items']);
+
+        $pdf = Pdf::loadView('invoices.pdf', compact('invoice', 'shop'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('ใบแจ้งหนี้-' . $invoice->document_number . '.pdf');
     }
 }

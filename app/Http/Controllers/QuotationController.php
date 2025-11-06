@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Quotation;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class QuotationController extends Controller
 {
@@ -237,5 +238,21 @@ class QuotationController extends Controller
 
         return redirect()->route('quotations.index')
             ->with('success', 'ลบใบเสนอราคาเรียบร้อยแล้ว');
+    }
+
+    public function exportPdf(Quotation $quotation)
+    {
+        $shop = auth()->user()->shop;
+
+        if (!$shop || $quotation->shop_id !== $shop->id) {
+            abort(403);
+        }
+
+        $quotation->load(['customer', 'items']);
+
+        $pdf = Pdf::loadView('quotations.pdf', compact('quotation', 'shop'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('ใบเสนอราคา-' . $quotation->document_number . '.pdf');
     }
 }
