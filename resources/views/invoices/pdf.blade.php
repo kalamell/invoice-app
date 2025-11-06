@@ -5,21 +5,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>ใบแจ้งหนี้ - {{ $invoice->document_number }}</title>
     <style>
-        @font-face {
-            font-family: 'THSarabunNew';
-            font-style: normal;
-            font-weight: normal;
-            src: url("{{ storage_path('fonts/THSarabunNew.ttf') }}") format('truetype');
-        }
-        @font-face {
-            font-family: 'THSarabunNew';
-            font-style: normal;
-            font-weight: bold;
-            src: url("{{ storage_path('fonts/THSarabunNew Bold.ttf') }}") format('truetype');
-        }
         body {
-            font-family: 'THSarabunNew', Arial, sans-serif;
-            font-size: 14pt;
+            font-family: 'DejaVu Sans', 'Garuda', 'Arial', sans-serif;
+            font-size: 12pt;
             line-height: 1.6;
             color: #333;
         }
