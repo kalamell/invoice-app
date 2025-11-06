@@ -253,6 +253,10 @@ class QuotationController extends Controller
         $pdf = Pdf::loadView('quotations.pdf', compact('quotation', 'shop'))
             ->setPaper('a4', 'portrait');
 
+        // Load custom fonts for Thai support
+        $pdf->getDomPDF()->getOptions()->set('isRemoteEnabled', true);
+        $pdf->getDomPDF()->getOptions()->set('defaultFont', 'thsarabunnew');
+
         return $pdf->download('ใบเสนอราคา-' . $quotation->document_number . '.pdf');
     }
 }

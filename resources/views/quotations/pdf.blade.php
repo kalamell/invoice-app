@@ -6,8 +6,8 @@
     <title>ใบเสนอราคา - {{ $quotation->document_number }}</title>
     <style>
         body {
-            font-family: 'DejaVu Sans', 'Garuda', 'Arial', sans-serif;
-            font-size: 12pt;
+            font-family: 'THSarabunNew', 'Garuda', 'Norasi', sans-serif;
+            font-size: 16pt;
             line-height: 1.6;
             color: #333;
         }
