@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminPlanController;
+use App\Http\Controllers\Admin\AdminShopController;
+use App\Http\Controllers\Admin\AdminSubscriptionController;
+use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
@@ -42,6 +47,30 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Admin Routes
+Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+    // Shops Management
+    Route::get('/shops', [AdminShopController::class, 'index'])->name('shops.index');
+    Route::get('/shops/{shop}', [AdminShopController::class, 'show'])->name('shops.show');
+    Route::patch('/shops/{shop}/suspend', [AdminShopController::class, 'suspend'])->name('shops.suspend');
+    Route::delete('/shops/{shop}', [AdminShopController::class, 'destroy'])->name('shops.destroy');
+
+    // Users Management
+    Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
+    Route::patch('/users/{user}/role', [AdminUserController::class, 'updateRole'])->name('users.updateRole');
+
+    // Subscriptions Management
+    Route::get('/subscriptions', [AdminSubscriptionController::class, 'index'])->name('subscriptions.index');
+    Route::get('/subscriptions/{subscription}', [AdminSubscriptionController::class, 'show'])->name('subscriptions.show');
+
+    // Plans Management
+    Route::resource('plans', AdminPlanController::class);
 });
 
 require __DIR__.'/auth.php';
